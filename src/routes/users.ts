@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 import { knex } from '../../db/config'
 
-export const userRoutes = async (app: FastifyInstance) => {
+export const usersRoutes = async (app: FastifyInstance) => {
   app.post('/', async (request, reply) => {
     const createUserSchema = z.object({
       name: z.string(),
@@ -19,7 +19,7 @@ export const userRoutes = async (app: FastifyInstance) => {
 
       reply.setCookie('sessionId', sessionId, {
         path: '/',
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+        maxAge: 60 * 60 * 24 * 7, // 7 days
       })
     }
 
