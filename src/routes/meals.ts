@@ -42,6 +42,7 @@ export const mealsRoutes = async (app: FastifyInstance) => {
         date: z.coerce.date().optional(),
       })
 
+      const sessionUser = request.user
       const { mealId } = paramsSchema.parse(request.params)
 
       if (!mealId) return reply.status(404).send('Unable to use meald ID')
@@ -58,7 +59,7 @@ export const mealsRoutes = async (app: FastifyInstance) => {
       )
 
       await knex('meals')
-        .where({ id: mealId })
+        .where({ id: mealId, user_id: sessionUser?.id })
         .update({
           name: name || mealToUpdate?.name,
           description: description || mealToUpdate?.description,
@@ -78,6 +79,7 @@ export const mealsRoutes = async (app: FastifyInstance) => {
       const paramsSchema = z.object({
         mealId: z.string(),
       })
+      const sessionUser = request.user
 
       const { mealId } = paramsSchema.parse(request.params)
 
@@ -90,7 +92,9 @@ export const mealsRoutes = async (app: FastifyInstance) => {
 
       if (!mealToDelete) return reply.status(404).send('Meal not found')
 
-      await knex('meals').where({ id: mealId }).delete()
+      await knex('meals')
+        .where({ id: mealId, user_id: sessionUser?.id })
+        .delete()
 
       return reply.status(204).send()
     },
@@ -127,6 +131,52 @@ export const mealsRoutes = async (app: FastifyInstance) => {
         .first()
 
       return reply.status(200).send({ meal })
+    },
+  )
+
+  app.get(
+    '/metrics',
+    { preHandler: [checkSessionId] },
+    async (request, reply) => {
+      const sessionUser = request.user
+
+      const totalMealsOnDiet = await knex('meals')
+        .where({ user_id: sessionUser?.id, is_on_diet: true })
+        .count('id', { as: 'total' })
+        .first()
+
+      const totalMealsOffDiet = await knex('meals')
+        .where({ user_id: sessionUser?.id, is_on_diet: false })
+        .count('id', { as: 'total' })
+        .first()
+
+      const totalMeals = await knex('meals')
+        .where({ user_id: sessionUser?.id })
+        .orderBy('created_at', 'desc')
+
+      const { bestDietSequence } = totalMeals.reduce(
+        (acc, meal) => {
+          if (meal.is_on_diet) {
+            acc.currentSequence += 1
+          } else {
+            acc.currentSequence = 0
+          }
+
+          if (acc.currentSequence > acc.bestDietSequence) {
+            acc.bestDietSequence = acc.currentSequence
+          }
+
+          return acc
+        },
+        { currentSequence: 0, bestDietSequence: 0 },
+      )
+
+      return reply.status(200).send({
+        totalMeals: totalMeals.length,
+        totalMealsOnDiet: totalMealsOnDiet?.total,
+        totalMealsOffDiet: totalMealsOffDiet?.total,
+        bestDietSequence,
+      })
     },
   )
 }
