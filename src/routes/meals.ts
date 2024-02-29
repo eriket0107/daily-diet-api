@@ -19,6 +19,8 @@ export const mealsRoutes = async (app: FastifyInstance) => {
 
     const sessionUser = request.user
 
+    if (!sessionUser) return reply.status(404).send('User not found')
+
     await knex('meals').insert({
       name,
       description,
@@ -95,4 +97,17 @@ export const mealsRoutes = async (app: FastifyInstance) => {
       return reply.status(204).send()
     },
   )
+
+  app.get('/list', { preHandler: [checkSessionId] }, async (request, reply) => {
+    const sessionUser = request.user
+
+    if (!sessionUser) return reply.status(404).send('User not found')
+
+    const listMeals = await knex('meals')
+      .select('')
+      .where({ user_id: sessionUser?.id })
+      .orderBy('date', 'desc')
+
+    return reply.status(200).send({ listMeals })
+  })
 }
