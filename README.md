@@ -1,8 +1,7 @@
-### Regras da aplicação
+# Regras da aplicação
 
 - [X] Deve ser possível criar um usuário
 - [X] Deve ser possível identificar o usuário entre as requisições
-- [] Deve ser possível criar outra sessão/login com um usuário existente
 - [X] Deve ser possível registrar uma refeição feita, com as seguintes informações:
 
 - *As refeições devem ser relacionadas a um usuário*
@@ -21,3 +20,4 @@
   - [X] Quantidade total de refeições fora da dieta
   - [X] Melhor sequência de refeições dentro da dieta
 - [X] O usuário só pode visualizar, editar e apagar as refeições o qual ele criou
+- [ ] Deve ser possível criar outra sessão/login com um usuário existente
