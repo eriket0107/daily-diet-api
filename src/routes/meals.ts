@@ -19,8 +19,6 @@ export const mealsRoutes = async (app: FastifyInstance) => {
 
     const sessionUser = request.user
 
-    if (!sessionUser) return reply.status(404).send('User not found')
-
     await knex('meals').insert({
       name,
       description,
@@ -101,8 +99,6 @@ export const mealsRoutes = async (app: FastifyInstance) => {
   app.get('/list', { preHandler: [checkSessionId] }, async (request, reply) => {
     const sessionUser = request.user
 
-    if (!sessionUser) return reply.status(404).send('User not found')
-
     const listMeals = await knex('meals')
       .select('')
       .where({ user_id: sessionUser?.id })
@@ -110,4 +106,27 @@ export const mealsRoutes = async (app: FastifyInstance) => {
 
     return reply.status(200).send({ listMeals })
   })
+
+  app.get(
+    '/:mealId',
+    { preHandler: [checkSessionId] },
+    async (request, reply) => {
+      const paramsSchema = z.object({
+        mealId: z.string(),
+      })
+
+      const sessionUser = request.user
+
+      const { mealId } = paramsSchema.parse(request.params)
+
+      if (!mealId) return reply.status(404).send('Unable to use meald ID')
+
+      const meal = await knex('meals')
+        .select()
+        .where({ id: mealId, user_id: sessionUser?.id })
+        .first()
+
+      return reply.status(200).send({ meal })
+    },
+  )
 }
