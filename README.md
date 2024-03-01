@@ -6,13 +6,13 @@ This repository contains the source code for a Daily Diet application. The appli
 ## Using *Sqlite*
 
 - set in .env DB_TYPE variable as sqlite
-*DB_TYPE=sqlite*
+`DB_TYPE=sqlite`
 
 ## Using *Postgres* 
 
 - follow docker process
 - set in .env DB_TYPE variable as pg
-*DB_TYPE=pg*
+`DB_TYPE=pg`
 
 ## Prerequisites
 
@@ -20,7 +20,7 @@ This repository contains the source code for a Daily Diet application. The appli
 
 ## Running the Application with Docker
 
-bash docker build -t daily-diet-app .
+bash `docker build -t daily-diet-app .`
 
 ### Building the Docker Image
 
@@ -33,7 +33,7 @@ bash docker build -t daily-diet-app .
 
 1. After building the image, run the following command to start a Docker container:
 
-bash docker run -d --name daily-diet-container -p 5432:5432 daily-diet-app
+bash `docker run -d --name daily-diet-container -p 5432:5432 daily-diet-app`
 
 ## App Rules
 
