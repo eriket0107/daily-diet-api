@@ -5,7 +5,7 @@ import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import { app } from '../src/app'
 
-describe('Users routes', () => {
+describe('Users routes', async () => {
   beforeAll(async () => {
     await app.ready()
   })
