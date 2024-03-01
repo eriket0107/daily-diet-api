@@ -41,7 +41,7 @@ bash `docker run -d --name daily-diet-container -p 5432:5432 daily-diet-app`
 - [X] It should be possible to identify the user between requests
 - [X] It should be possible to register a meal made, with the following information:
 
-- *The meals must be related to a user*
+*The meals must be related to a user*
 - Name
 - Description
 - Date and Time
