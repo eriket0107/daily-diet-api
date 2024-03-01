@@ -3,17 +3,22 @@ import path from 'path'
 
 import { env } from '../src/env'
 
+let connection
+
+if (env.DB_TYPE === 'pg') {
+  connection = {
+    user: env.DB_USER,
+    password: env.DB_PASSWORD,
+    database: env.DB_NAME,
+    port: env.DB_PORT,
+  }
+} else if (env.DB_TYPE === 'sqlite') {
+  connection = { filename: env.DB_URL }
+}
+
 export const config: Knex.Config = {
   client: env.DB_TYPE,
-  connection:
-    env.DB_TYPE === 'pg'
-      ? {
-          user: env.DB_USER,
-          password: env.DB_PASSWORD,
-          database: env.DB_NAME,
-          port: env.DB_PORT,
-        }
-      : { filename: env.DB_URL },
+  connection,
   useNullAsDefault: true,
   migrations: {
     extension: 'ts',

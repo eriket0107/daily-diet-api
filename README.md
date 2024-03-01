@@ -1,23 +1,61 @@
-# Regras da aplicação
+# Daily Diet Application
 
-- [X] Deve ser possível criar um usuário
-- [X] Deve ser possível identificar o usuário entre as requisições
-- [X] Deve ser possível registrar uma refeição feita, com as seguintes informações:
+This repository contains the source code for a Daily Diet application. The application allows users to track their meals, including whether they are within or outside of their diet. It also provides metrics on the user's dietary habits.
 
-- *As refeições devem ser relacionadas a um usuário*
-  - Nome
-  - Descrição
-  - Data e Hora
-  - Está dentro ou não da dieta
 
-- [X] Deve ser possível editar uma refeição, podendo alterar todos os dados acima
-- [X] Deve ser possível apagar uma refeição
-- [X] Deve ser possível listar todas as refeições de um usuário
-- [X] Deve ser possível visualizar uma única refeição
-- [X] Deve ser possível recuperar as métricas de um usuário
-  - [X] Quantidade total de refeições registradas
-  - [X] Quantidade total de refeições dentro da dieta
-  - [X] Quantidade total de refeições fora da dieta
-  - [X] Melhor sequência de refeições dentro da dieta
-- [X] O usuário só pode visualizar, editar e apagar as refeições o qual ele criou
-- [ ] Deve ser possível criar outra sessão/login com um usuário existente
+## Using *Sqlite*
+
+- set in .env DB_TYPE variable as sqlite
+*DB_TYPE=sqlite*
+
+## Using *Postgres* 
+
+- follow docker process
+- set in .env DB_TYPE variable as pg
+*DB_TYPE=pg*
+
+## Prerequisites
+
+- Docker installed on your machine
+
+## Running the Application with Docker
+
+bash docker build -t daily-diet-app .
+
+### Building the Docker Image
+
+1. Open a terminal in the root directory of your project.
+2. Run the following command to build the Docker image:
+
+ This command builds a Docker image named `daily-diet-app` from the Dockerfile in the current directory.
+
+### Running the Docker Container
+
+1. After building the image, run the following command to start a Docker container:
+
+bash docker run -d --name daily-diet-container -p 5432:5432 daily-diet-app
+
+## App Rules
+
+- [X] It should be possible to create a user
+- [X] It should be possible to identify the user between requests
+- [X] It should be possible to register a meal made, with the following information:
+
+- *The meals must be related to a user*
+- Name
+- Description
+- Date and Time
+- Whether it is within or not the diet
+
+- [X] It should be possible to edit a meal, being able to change all the data above
+- [X] It should be possible to delete a meal
+- [X] It should be possible to list all the meals of a user
+- [X] It should be possible to view a single meal
+- [X] It should be possible to retrieve the metrics of a user
+- [X] Total number of meals registered
+- [X] Total number of meals within the diet
+- [X] Total number of meals outside the diet
+- [X] Best sequence of meals within the diet
+
+- [X] The user can only view, edit, and delete the meals they created
+- [ ] It should be possible to create another session/login with an existing user
